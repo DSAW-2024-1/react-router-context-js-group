@@ -1,27 +1,31 @@
-// App.js
-
-import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { AuthProvider } from './contexts/AuthContext';
-import PrivateRoute from './components/PrivateRoute';
-import LoginPage from './pages/LoginPage';
-import HomePage from './pages/HomePage';
-import OverviewPage from './pages/OverviewPage';
-import ContactPage from './pages/ContactPage';
+import React, { useState } from 'react';
+import { Formulario } from './components/Formulario';
+import { Home } from './components/Home';
+import { Overview } from './components/Overview'; // Nueva importación
+import { Contact } from './components/Contact'; // Nueva importación
+import './App.css';
 
 function App() {
-  return (
-    <Router>
-      <AuthProvider>
-        <Switch>
-          <Route exact path="/login" component={LoginPage} />
-          <PrivateRoute exact path="/" component={HomePage} />
-          <PrivateRoute exact path="/overview" component={OverviewPage} />
-          <PrivateRoute exact path="/contact" component={ContactPage} />
-        </Switch>
-      </AuthProvider>
-    </Router>
-  );
+    const [user, setUser] = useState([]);
+
+    return (
+        <div className='App'>
+            {
+                !user.length > 0
+                    ? <Formulario setUser={setUser} />
+                    : (
+                        <>
+                            {/* Muestra Home cuando el usuario está autenticado */}
+                            <Home user={user} setUser={setUser} />
+                            {/* Muestra Overview cuando el usuario está autenticado */}
+                            <Overview user={user} setUser={setUser} />
+                            {/* Muestra Contact cuando el usuario está autenticado */}
+                            <Contact user={user} setUser={setUser} />
+                        </>
+                    )
+            }
+        </div>
+    );
 }
 
 export default App;
